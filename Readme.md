@@ -9,6 +9,7 @@ Die Komponenten sind:
   - Um dies Auszunutzen muss z.B: `commons-collections:commons-collections:3.1` im Classpath sein.
 - serve_exploit.sh: Kompiliert das remote-Projekt und startet einen Server, der das Classfile ausliefert.
 - listen_to_udp.sh: Öffnet ein UDP-Port und gibt eine Antwort.
+- jndi: Ein Beispiel für den Exploit, der nur JNDI verwendet.
 
 In `build.gradle` von `log4shell` wird `Dcom.sun.jndi.ldap.object.trustURLCodebase=true` gesetzt, damit
 der Remote-Classloading Teil funktioniert. Es ist natürlich interessant die Beispiele einfach mal ohne diesen

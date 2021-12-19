@@ -1,0 +1,18 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+application {
+    applicationDefaultJvmArgs = ["-Dcom.sun.jndi.ldap.object.trustURLCodebase=true"]
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'commons-collections:commons-collections:3.1'
+}
+
+mainClassName = 'log4shell.Main'
